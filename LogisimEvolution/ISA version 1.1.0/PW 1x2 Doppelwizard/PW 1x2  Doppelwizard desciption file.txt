@@ -1,0 +1,96 @@
+PW 1x2 Doppelwizard: a simplistic dual-core Picowizard implementation by RascalFoxfire
+####################################################################################################
+
+Introduction
+----------------------------------------------------------------------------------------------------
+The PW 1x2 Doppelwizard CPU is a dual core system based on the standard PW 1 with memory and I/O
+according to the recommended address mapping format number 2 (1-1-2 format) from the specification
+"suggested address spaces".
+
+This system uses two PW 1As (only change to the PW 1 being the addition of a dedicated external stop
+pin) with external logic and special address spaces for synchronisation. An address reservation unit
+is available to synchronize between cores safely.
+
+As with the standard PW 1 it is fully conform to the Picowizard+ 1.1.0 specification.
+
+The CPU itself needs four clock cycles to execute one instruction (load, execute, write back, wait).
+With that the external memory has exactly 2 clockcycle time to perform a load/store operation till
+the CPU writes back. This can be extended if the memory is internally pipelined but that bears the
+risk of load/store after load/store data hazards.
+
+General information
+----------------------------------------------------------------------------------------------------
+ -Architecture: Picowizard+ 1.1.0 release (fully compatible)
+ -Cores: 2 x PW 1A Wizard
+ - -Synchronisation: via memory mapped register which reserves a core exclusive address, blocking
+    the other core when it tries to access the reserved address
+ - -Threads per core: 1
+ -Memory: ROM 16 KiBi, RAM 32 KiBi
+ - -Organisation ROM: Single bank ROM with subsystem to stop cores on address and load/store cycle
+    collisions
+ - -Organisation RAM: Dual bank lowest bit interleaved parallel RAM with subsystem to stop cores on
+    address and load/store cycle collisions
+ -IPC: 0.25 per core, 0.5 maximum
+
+Address map
+----------------------------------------------------------------------------------------------------
+Addr.	Type	Description
+0x0000-	ROM	Contains the startup test and boot routines (BIOS)
+0x3FFF
+0x4000-	I/O	General I/O and special functions address space
+0x7FFF
+0x8000-	RAM	General purpose/program RAM
+0xFFFF
+
+I/O address space
+Addr.	Type	Description
+0x4000	O	ASCII to terminal
+0x400F	O	Terminal control register
+0x4010	I	ASCII from keyboard
+0x4400	O	Lower 8 bit of an address to reserve/block from other components/cores
+0x4401	O	Higher 8 bit of an address to reserve/block from other components/cores
+0x440F	O	Address reservation control register
+
+Atomic unit
+----------------------------------------------------------------------------------------------------
+Control unit
+Bit	Description
+1	0 => Atomics inactive for core, 1 => Atomics active for core (will block other core)
+2	-
+3	-
+4	-
+5	-
+6	-
+7	-
+
+Basics of programming
+----------------------------------------------------------------------------------------------------
+When starting the simulation all cores will run at the same time (the second will be halted until
+the first doesn't block the ROM anymore). As that they will execute the same code. How can you let
+them run at different code/avoid race conditions?
+
+For that the atomic unit exists! First put in the address of a RAM address (also works with ROM to
+exclusively read from a memory location) and then put a simple 0x01 in the atomic control register
+(address 0x440F, see above). This will lock the address exclusively for the core giving it exclusive
+read/write privilege. Won't the second core also run the routine to reserve the address with the
+atomic unit? Yes, but it will be blocked since the first core to reserve the address in the atomic
+unit hadn't unlocked it yet. As that even if both cores are trying to reserve the same address the
+slower one will be safely blocked before it can activate the atomic unit for itself.
+
+Now the first core can first read the reserved address to see if it was already be written before,
+then write something in it. NEVER FORGET TO RELEASE THE LOCK WHEN DONE ON THE RESERVED ADDRESS!!!
+After that the second core can reserve the address, look if sommething was already written before
+and then react to it.
+
+A simple routine could look like the following:
+ -Lock free RAM address X
+ -Read the value in it
+ - -If a 0 was written (it was the first core to access the address) write a 1 in it and jump to Y
+ - -If a 1 was written (it was the second core to access the address) jump to Z
+ -Unlock the address
+
+Independent of which core reaches the routine first it will split the two, letting them jump to
+different parts of the code.
+
+This MUST be applied to safely use the I/O units since they will generate garbage if accessed by both
+cores at the same time!

@@ -1,0 +1,4 @@
+Picowizard brainstorming file
+####################################################################################################
+This file contains general thoughts for future extensions/changes of the Picowizard ISA. Bare in
+mind that these suggested changes are NOT finished.

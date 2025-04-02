@@ -1,0 +1,24 @@
+PW 1 Wizard: a simplistic Picowizard CPU implementation in Logisim Evolution by RascalFoxfire
+####################################################################################################
+
+Introduction
+----------------------------------------------------------------------------------------------------
+The PW 1 Wizard CPU is the first real implementaion of the Picowizard CPU outside of the previous
+prototypes. It is the most simple implementation possible without any optimization in regard of
+instruction execution time.
+
+It is fully conform to the Picowizard+ 1.1.0 ISA specifications. The address space is undefined since
+the CPU can be used as an IP-block in whatever external configuration it is needed.
+
+It needs a memory block with separated data input and output port, one address selection port and
+one read and write enable port (load enable can be ignored for some memory blocks).
+
+The CPU itself needs four clock cycles to execute one instruction (load, execute, write back, wait).
+With that the external memory has exactly 2 clockcycle time to perform a load/store operation till
+the CPU writes back. This can be extended if the memory is internally pipelined but that bears the
+risk of load/store after load/store data hazards.
+
+General information
+----------------------------------------------------------------------------------------------------
+ -Architecture: Picowizard 1.1.0 release (full compatible)
+ -IPC: 0.25

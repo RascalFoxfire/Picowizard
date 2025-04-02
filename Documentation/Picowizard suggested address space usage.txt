@@ -1,0 +1,46 @@
+RACUDEUS universal Pico-CPU Picowizard suggested address spaces for version 1.0.0 by RascalFoxfire
+####################################################################################################
+This is a suggested organization for general use of the Picowizard. This is not a part of ISA and
+can be ignored. However, it would be in general advantageous to standardize also the address space
+for easier software cross development.
+
+General organization
+####################################################################################################
+As first organization step we would suggest to divide the memory in four areas:
+0x0000-0x3FFF: Block 0
+0x4000-0x7FFF: Block 1
+0x8000-0xBFFF: Block 2
+0xC000-0xFFFF: Block 3
+
+To cover a wider array of use cases we would suggest three different organization schemas based on
+the four area division.
+ -A RAM/ROM focused organisation
+ -A RAM/ROM and I/O balanced organisation
+ -An I/O focused organisation
+
+The RAM/ROM focused organisation schema
+----------------------------------------------------------------------------------------------------
+In the first schema the main focus is on reserving as much address space as possible for instruction
+and data space. This is organized as following:
+ -Block 0 is divided into two parts
+ - -0x0000-0x1FFF: ROM for firmware like boot software
+ - -0x2000-0x3FFF: I/O addresses
+ -Block 1, Block 2 and Block 3 are exclusively used for RAM/ROM (depending on use case and security)
+
+The RAM/ROM and I/O balanced organisation schema
+----------------------------------------------------------------------------------------------------
+The second schema balances the address space between RAM/ROM and I/O as following:
+ -Block 0 is ROM for firmware like boot software
+ -Block 1 is I/O address space exclusively
+ -Block 2 and Block 3 are free for RAM/ROM
+
+The I/O focused organisation schema
+----------------------------------------------------------------------------------------------------
+The third schema focuses on mainly I/O space as following:
+ -Block 0 is ROM for firmware like boot software
+ -Block 1 and Block 2 is I/O address space exclusively
+ -Block 3 is free for RAM/ROM
+
+Specific I/O address organization
+####################################################################################################
+Coming soon (see proposed changes)

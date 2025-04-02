@@ -1,0 +1,47 @@
+Picowizard ISA version 1.0.0 programmers cheatsheet by RascalFoxfire
+####################################################################################################
+This is a shortend version of the full ISA documentation specially for low level programmers. It
+contains all ISA specifications and behaviour in a compressed format. For more informations please
+refer to the full documentation
+
+CPU compressed specifications
+####################################################################################################
+General operation format
+00	0	0.0	0	00
+Op.	Opext.	Regadr	Opext.	Regadr
+		Source		Source
+		Target
+
+Operatons
+Assem.	Bits		Version		Description
+MOV	000T.T0SS	Picowizard	Moves value from register S to register T
+MOV	00TT.TSSS	Picowizard+	Moves value from register S to register T
+ADD	010T.T0SS	All		Add register S + register T, store to register T and CRY
+ADC	010T.T1SS	All		Add register S + register T + CRY, store to register T and CRY
+NAND	011T.T0SS	All		NAND operation register S NAND register T, store to register T and set CRY to 1
+XOR	011T.T1SS	All		XOR operation register S XOR register T, store to register T and set CRY to 1
+LDA	100T.T0AA	All		Load from memory address <SEG> (high 8 bit) and register A (low 8 bit) to register T
+STRA	100S.S1AA	All		Store to memory address <SEG> (high 8 bit) and register A (low 8 bit) from register S
+BIZ	101C.C0AA	All		If register C = 0 then jump to <SEG> (high 8 bit) and register A (low 8 bit), otherwise go to the next Op
+JMP	101S.S1AA	All		Jump directly to register S (high 8 bit) and register A (low 8 bit)
+LDI	11VV.VVVV	All		Load directly V into <A>
+
+Registers
+Assem.	Address	Version		Description
+A	0	All		Universal register/target for LDI
+B	1	All		Universal register/call register for lower 8 address bits
+C	2	All		Universal register/call register for higher 8 address bits
+SEG	3	All		Universal register/holds higher 8 bits of an address
+TA	4	Picowizard+	Temporary variable store register
+TB	5	Picowizard+	Temporary variable store register
+TC	6	Picowizard+	Temporary variable store register
+TD	7	Picowizard+	Temporary variable store register
+ -Invisible/shadow-Register
+CTR	#	All		Counter
+CRY	#	All		Carry flag register
+
+Additional behavior:
+ -Stops when CTR is overflowing from address 0xFFFF to 0x(1)0000
+
+Tips:
+ -Reset can be used as a simple form of interrupt with interrupt vector 0x0000
