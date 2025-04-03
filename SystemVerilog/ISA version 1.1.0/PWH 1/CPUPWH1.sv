@@ -80,7 +80,7 @@ module CPUPW1(
     //Counter and branch
     always_comb Zero = ~(OutRegA[0] | OutRegA[1] | OutRegA[2] | OutRegA[3] | OutRegA[4] | OutRegA[5] | OutRegA[6] | OutRegA[7]);
     always_comb begin
-        if (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] && Zero) JumpAdr = {Seg, OutRegB};
+        if (CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && Zero) JumpAdr = {Seg, OutRegB};
         else JumpAdr = {OutRegA, OutRegB};
     end
     
@@ -136,7 +136,7 @@ module CPUPW1(
     end
     always_ff @(posedge Clk) begin
         if (!CPUEn) CurrentOp <= 8'b00000000;
-        else if (MicroCounter[0] & ~MicroCounter[1] & CPUEnable) CurrentOp <= DataIn; //Update current operation register
+        else if (MicroCounter[0] & !MicroCounter[1] && CPUEnable) CurrentOp <= DataIn; //Update current operation register
     end
     
     //Register input update
