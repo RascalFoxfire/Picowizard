@@ -30,7 +30,7 @@ The following values were determined using the following tools and hardware:
  -Run on a Digilent Nexys A7 100T (Xilinx Artix 7 100T)
 
 Tested values:
- -Maximum simulated frequency: 170 MHz (0.122ns positive slack)
+ -Maximum simulated frequency: 170 MHz (0.095ns positive slack)
  -MIPS: 42.5
  -Used FF: 59 (only CPU)
  -Used LUTs: 143 (only CPU)
