@@ -3,7 +3,7 @@
 Picowizard is an extremly small ISA designed for CPUs to be used in ASICs and FPGAs for management purposes where larger ISAs and subsequent CPU designs (like RISC-V) just don't fit/aren't needed. It focuses on the bare minimum needed to manage its surroundings while still being easily programmable and reasonably fast.
 
 ## Basic informations about the Picowizard ISA
-- Tested on a FPGA (Digilent Nexy A7 100T) running at 170 MHz while only using 59 FF and 148 LUTs for itself!
+- Tested on a FPGA (Digilent Nexy A7 100T) running at 170 MHz while only using 59 FF and 143 LUTs for itself!
 - ISA is minimized to avoid the need for internal memory (like BRAM)
 - 4 or 8 (Picowizard+) registers (A, B, C, SEG, TA, TB, TC, TD)
 - 10 instructions for data movement, program control and arithmetics/bitwise logic

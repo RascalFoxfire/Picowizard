@@ -136,7 +136,7 @@ module CPUPW1(
     end
     always_ff @(posedge Clk) begin
         if (!CPUEn) CurrentOp <= 8'b00000000;
-        else if (MicroCounter[0] & !MicroCounter[1] && CPUEnable) CurrentOp <= DataIn; //Update current operation register
+        else if (MicroCounter[0] && !MicroCounter[1] && CPUEnable) CurrentOp <= DataIn; //Update current operation register
     end
     
     //Register input update

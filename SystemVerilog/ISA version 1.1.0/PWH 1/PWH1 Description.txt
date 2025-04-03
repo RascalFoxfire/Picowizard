@@ -33,4 +33,4 @@ Tested values:
  -Maximum simulated frequency: 170 MHz (0.122ns positive slack)
  -MIPS: 42.5
  -Used FF: 59 (only CPU)
- -Used LUTs: 148 (only CPU)
+ -Used LUTs: 143 (only CPU)
