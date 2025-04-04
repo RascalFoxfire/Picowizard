@@ -48,16 +48,16 @@ module CPUPW1(
     
     //Operations
     always_comb CALL = Write & (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & Zero) | (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & !CurrentOp[2]);
-    always_comb StrOps = ~CurrentOp[7] | CurrentOp[6] | CurrentOp[7] & ~CurrentOp[6] & ~CurrentOp[5] & ~CurrentOp[2];
+    always_comb StrOps = ~CurrentOp[7] | CurrentOp[6] | (CurrentOp[7] & ~CurrentOp[6] & ~CurrentOp[5] & ~CurrentOp[2]);
     
     //Registers
     always_comb InRegB = CALL ? IncAdr[7:0] : RegIn;
     always_comb InRegC = CALL ? IncAdr[15:8] : RegIn;
     
-    always_comb StoreToA = ~CurrentOp[4] & ~CurrentOp[3] & CPUEnable & Write & StrOps;
-    always_comb StoreToB = ~CurrentOp[4] & CurrentOp[3] & CPUEnable & Write & StrOps;
-    always_comb StoreToC = CurrentOp[4] & ~CurrentOp[3] & CPUEnable & Write & StrOps;
-    always_comb StoreToSEG = CurrentOp[4] & CurrentOp[3] & CPUEnable & Write & StrOps;
+    always_comb StoreToA = ~CurrentOp[4] & ~CurrentOp[3] & Write & StrOps;
+    always_comb StoreToB = ~CurrentOp[4] & CurrentOp[3] & Write & StrOps;
+    always_comb StoreToC = CurrentOp[4] & ~CurrentOp[3] & Write & StrOps;
+    always_comb StoreToSEG = CurrentOp[4] & CurrentOp[3] & Write & StrOps;
     
     always_comb begin
         case ({CurrentOp[4], CurrentOp[3]})
@@ -123,8 +123,6 @@ module CPUPW1(
         endcase
     end
     
-    
-    
     //Counters update
     always_ff @(posedge Clk) begin
         if (!CPUEn) MicroCounter <= 2'b00; //Update microcounter
@@ -135,8 +133,7 @@ module CPUPW1(
         else if (CPUEnable && ((MicroCounter[0] && !MicroCounter[1]) || (MicroCounter[0] && MicroCounter[1] && (CurrentOp[7] && CurrentOp[6])) || (MicroCounter[0] && MicroCounter[1] && CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && Zero) || (MicroCounter[0] && MicroCounter[1] && CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && CurrentOp[2]))) CurrentAdr <= NextAdr; //Update counter
     end
     always_ff @(posedge Clk) begin
-        if (!CPUEn) CurrentOp <= 8'b00000000;
-        else if (MicroCounter[0] && !MicroCounter[1] && CPUEnable) CurrentOp <= DataIn; //Update current operation register
+        if (MicroCounter[0] && !MicroCounter[1] && CPUEnable) CurrentOp <= DataIn; //Update current operation register
     end
     
     //Register input update

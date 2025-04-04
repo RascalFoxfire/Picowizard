@@ -3,7 +3,7 @@ PWH1: a Picowizard SystemVerilog implementation by RascalFoxfire
 
 Introduction
 ----------------------------------------------------------------------------------------------------
-The PWH1 is the first real implemented Picowizard CPU outside of Logisim. It is designed to use as
+The PWH1 is the first real implemented Picowizard CPU outside of Logisim. It was designed to use as
 few hardware resources on an FPGA as possible (specifically optimized to 6-input LUTs) while still
 being able to be clocked at higher frequencies.
 
@@ -15,7 +15,7 @@ one read and write enable port (load enable can be ignored for some memory block
 
 The CPU itself needs four clock cycles to execute one instruction (load, execute, write back, wait).
 With that the external memory has exactly 2 clockcycle time to perform a load/store operation till
-the CPU writes back. This can be extended if the memory is internally pipelined but that bears the
+the CPUs writes back. This can be extended if the memory is internally pipelined but that bears the
 risk of load/store after load/store data hazards.
 
 General information
@@ -25,12 +25,12 @@ General information
 
 The following values were determined using the following tools and hardware:
  -Vivado 2024.2
- -PWH1 put together with 8 KByte of preloaded BRAM and a 48 KByte frame buffer system (XGA 1024x768)
-  (the files can be  found in the "TestProject" folder including the test software)
+ -PWH1(a) put together with 8 KByte of preloaded BRAM and a 48 KByte frame buffer system
+  (XGA 1024x768, the files can be  found in the "TestProject" folder including the test software)
  -Run on a Digilent Nexys A7 100T (Xilinx Artix 7 100T)
 
 Tested values:
- -Maximum simulated frequency: 170 MHz (0.095ns positive slack)
- -MIPS: 42.5
+ -Maximum simulated frequency: 180 MHz (0.139ns positive slack)
+ -MIPS: 45
  -Used FF: 59 (only CPU)
- -Used LUTs: 143 (only CPU)
+ -Used LUTs: 139 (only CPU)
