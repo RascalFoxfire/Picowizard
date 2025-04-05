@@ -1,0 +1,61 @@
+
+MOV A, A
+MOV A, A
+LDI SEG		//Set SEG initialy to 0
+0x00
+LDI A		//Load incrementor
+0x01
+LDI B		//Load the color
+0x00
+ADD B, A	//Increment color
+LDI C		//Load color store address
+0x07
+STRA B, C	//Store the color
+LDI C		//Load pixel address
+0x00
+LDI SEG		//Load line address
+0x40
+STRA B, C	//Store color into VGA
+ADD C, A	//Increment pixel address
+LDI A		//Load 0 for the line increment
+0x00
+ADC SEG, A	//Carry increment line address
+MOV B, SEG	//Store line address into the color register
+MOV SEG, A	//Set SEG to 0
+LDI A		//Load pixel address address
+0x0D
+STRA C, A	//Store the pixel address
+LDI C		//Get the jump address for the BIZ
+0x24
+MOV A, B	//Move line address to safety of BIZ
+BIZ A, C	//Branch!
+LDI B		//Load line address address
+0x0F
+STRA A, B	//Store line address
+LDI A		//Load loop address
+0x04
+JMP SEG, A	//Jump back
+LDI B		//Load initial line address
+0x40	
+LDI C		//Load line address address,
+0x0F
+STRA B, C	//Store line address
+LDI SEG		//Load loop address higher 8 bit
+0x00
+LDI B		//Load color address
+0x07
+LDA C, B	//Load the color
+LDI A		//Load incrementor
+0x01
+ADD C, A	//Increment color address
+STRA C, B	//Store updated color
+LDI A		//Load VGA command to switch buffers
+0x02
+LDI SEG		//Load hgher 8 bit of the VGA driver CCR address (0x3800)
+0x3C
+STRA A, A	//Since the VGA driver CCR listens to 0x3800-0x3FFF we can just use the command itself for the lower 8 bit, saving us one instruction
+LDI SEG
+0x00
+LDI A		//Load loop address
+0x02
+JMP SEG, A	//Jump back
