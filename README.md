@@ -19,8 +19,17 @@ The folder "SystemVerilog" holds all implementations of the ISA in SystemVerilog
 ## How can i develop software for the Picowizard?
 There is currently an Assembler and a simple ANSI C => Picowizard bitcode compiler in development
 
+## What is next?
+Picowizard is still further developed! There are multiple constructions sides around it:
+- Developing a fitting graphic driver following the same principles (as small as possible)
+- Further optimize the SystemVerilog implementation to get closer to the 100 Xilinx LUT mark
+- Define the recommended address layout
+- Build the assembler and compiler
+- Software, like SPI drivers
+- A programmers tutorial with tips and tricks on how to efficiently code on Picowizard CPUs
+
 ## The Pico-series
 Picowizard is only one of three similar ISAs for different use cases:
 - Picowizard: the smallest of the Picos when for cases where LUTs/silicon area is precious or only a minimalistic management engine is needed
-- Picoalchemist: the middle child ISA supporting up to 3 external interrupts + an internal 8 bit timer when I/O handling is the main goal
-- Picomage: the largest of the Pico-ISAs supporting a ring system (User/Kernel), multiple internal and one external interrupt (including 8 bit timer) and virtual addressing for tasks where secure management is the top priority
+- Picoalchemist: the middle child ISA supporting up to 3 external interrupts + an internal 8 bit timer when I/O handling is the main goal (coming soon)
+- Picomage: the largest of the Pico-ISAs supporting a ring system (User/Kernel), multiple internal and one external interrupt (including 8 bit timer) and virtual addressing for tasks where secure management is the top priority (coming soon)
