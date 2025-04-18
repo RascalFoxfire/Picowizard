@@ -1,0 +1,14 @@
+Picowizard ISA 1.1.0 tips and tricks for software developer
+####################################################################################################
+The Picowizard ISA is designed for pure compactness and as that, some sacrifices had to be made
+programming comfort and performance wise. This also includes the lack of more advanced features like
+a dedicated compare instruction or a shift unit. However, these short comings can be partially
+negated with some intelligent code design, patterns and some less obvious optimizations within the
+ISA itself.
+
+
+Tips for assembler programmers
+----------------------------------------------------------------------------------------------------
+This is a collection of different optimizations for assembler/hexadecimal
+
+- 

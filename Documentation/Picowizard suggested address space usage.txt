@@ -1,4 +1,4 @@
-RACUDEUS universal Pico-CPU Picowizard suggested address spaces for version 1.0.0 by RascalFoxfire
+Universal Pico-CPU Picowizard suggested address spaces by RascalFoxfire
 ####################################################################################################
 This is a suggested organization for general use of the Picowizard. This is not a part of ISA and
 can be ignored. However, it would be in general advantageous to standardize also the address space

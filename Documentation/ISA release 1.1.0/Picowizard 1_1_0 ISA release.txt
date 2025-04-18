@@ -1,11 +1,11 @@
 Picowizard ISA documentation version 1.1.0 by RascalFoxfire
 ####################################################################################################
-The RACUDEUS Pico-Series is an universal CPU-ISA series originally developed for embedded systems
-with very limited resources (area and power wise). As such they are optimized to take as few space
-as possible without sacrificing programmers comfort. However, the price of this is paid in
-"conventional" CPU power like FLOPS, Dhrystones/MHz and so on as the Picos are not optimized for
-large scale calculations nor fast memory operations but for system management in general. But even
-with that in mind the Picos can still be suprisingly fast when software is optimized for them.
+The Pico-Series is an universal CPU-ISA series originally developed for embedded systems with very
+limited resources (area and power wise). As such they are optimized to take as few space as possible
+without sacrificing programmers comfort. However, the price of this is paid in "conventional" CPU
+power like FLOPS, Dhrystones/MHz and so on as the Picos are not optimized for large scale
+calculations nor fast memory operations but for system management in general. But even with that in
+mind the Picos can still be suprisingly fast when software is optimized for them.
 
 But this is literally the second downfall: the Picos CAN be very fast but only if done right. On the
 one hand with some programming magic and the right usage of the provided quirks and functions they
