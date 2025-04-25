@@ -42,6 +42,4 @@ CRY	#	All		Carry flag register
 
 Additional behavior:
  -Stops when CTR is overflowing from address 0xFFFF to 0x(1)0000
-
-Tips:
- -Reset can be used as a simple form of interrupt with interrupt vector 0x0000
+ -Register A, B, C and SEG aren't set to 0 during a reset! Only CTR and CRY are

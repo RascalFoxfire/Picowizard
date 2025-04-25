@@ -1,0 +1,28 @@
+Picowizard ISA tips and tricks for software developer
+####################################################################################################
+The Picowizard ISA is designed for pure compactness and as that, some sacrifices had to be made
+programming comfort and performance wise. This also includes the lack of more advanced features like
+a dedicated compare instruction or a shift unit. However, these short comings can be partially
+negated with some intelligent code design, patterns and some less obvious optimizations within the
+ISA itself.
+
+
+Tips for assembler programmers
+----------------------------------------------------------------------------------------------------
+This is a collection of different optimizations for assembler/hexadecimal
+
+Arithmetics:
+- Comparing two values can be done with a subtraction, followed up by an ADC on an empty register to
+  get the carry bit. This register with the carry bit (or zero) can then by checked with BIZ. If it
+  is zero, then A < B but if there was a carry then A >= B. To find out if A > B or A = B the actual
+  result of the subtraction can be checked. If the result is zero then A = B, if not then A > B
+- Right shift can be achieved by using ADC with the same register as source A and B to "barrel shift"
+  the value. Meanwhile a normal left shift can be simply achieved by using ADD instead.
+- Subtraction is achievable by inverting the minuend with NAND and then use ADC. The NAND instruction
+  automatically sets the carry register to 1 to correct the computation.
+
+Loops:
+- For/iterative loops in ISA version 1.1 can be simplified when using SRAM memory for the routine.
+  The initial loop value can be loaded with LDI which uses the follow up byte as value. This value
+  byte can also be manipulated by STRA and LDA to increment/decrement it while in the next iteration
+  this updated value gets then again loaded by the LDI instruction.

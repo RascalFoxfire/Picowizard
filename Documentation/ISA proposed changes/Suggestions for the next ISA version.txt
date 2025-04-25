@@ -2,3 +2,14 @@ Picowizard brainstorming file
 ####################################################################################################
 This file contains general thoughts for future extensions/changes of the Picowizard ISA. Bare in
 mind that these suggested changes are NOT finished.
+
+Suggested changes for 1.2
+----------------------------------------------------------------------------------------------------
+ -BIZ not storing the current CTR + 1
+ -JMP storing the return address in SEG and C instead of C and B
+
+
+Suggested changes for major overhaul 2.0
+----------------------------------------------------------------------------------------------------
+ -Remove MOV, using LDI X 0; ADD Y X as an alternative (needs code size testing). This would give 4
+  more instructions

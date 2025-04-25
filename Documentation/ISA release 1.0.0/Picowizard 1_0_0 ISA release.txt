@@ -185,3 +185,4 @@ Further information/special notes and behaviour
  -The first address (0x0000) must be the first instruction to be executed!
  -The CPU must stop when the counter overflows (running to address 0x10000). As such 0xFFFF must not
   be the last instruction to be successfully executed (0xFFFE is the last)!
+ -A reset must not reset register A, B, C and SEG, only CTR and CRY!
