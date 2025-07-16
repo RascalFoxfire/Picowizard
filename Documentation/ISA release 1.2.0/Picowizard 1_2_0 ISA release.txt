@@ -1,0 +1,202 @@
+Picowizard ISA documentation version 1.1.0 by RascalFoxfire
+####################################################################################################
+The Pico-Series is an universal CPU-ISA series originally developed for embedded systems with very
+limited resources (area and power wise). As such they are optimized to take as few space as possible
+without sacrificing programmers comfort. However, the price of this is paid in "conventional" CPU
+power like FLOPS, Dhrystones/MHz and so on as the Picos are not optimized for large scale
+calculations nor fast memory operations but for system management in general. But even with that in
+mind the Picos can still be suprisingly fast when software is optimized for them.
+
+But this is literally the second downfall: the Picos CAN be very fast but only if done right. On the
+one hand with some programming magic and the right usage of the provided quirks and functions they
+can become very fast but on the other hand easily suffer (even quite extremely) on unoptimized code
+which makes efficient programming even more of a concern.
+
+Additionally the Picos are to 90% bit compatible. Most of the code can be recycled with only a
+minimum of adjustments. Be advised that this compatibility works from the smallest to the largest
+CPU. In other words: a Picowizard can not execute a program written for a Picomage but a Picomage
+can with a few adjustments execute a programm made for the Picowizard
+
+Picowizard basics
+----------------------------------------------------------------------------------------------------
+The Picowizard is the smallest and simplest of the Pico-Series with functions that makes it barely
+turing complete. It is the perfect CPU for systems where either space is so incredible limited that
+even the other Pico wouldn't fit or where more complex systems are simply not needed. As such the
+Picowizard can fit many roles including as a standardized alternative for complex hand crafted
+statemachines, central management core for simple sensors via memory mapped I/O and (the original
+development reason) as on chip energy manager/monitor.
+
+It is a RISC-like von Neumann similar CPU with 8 bit data and 16 bit address width. Unlike the other
+Picos it does not feature interrupts, address virtualization or a ring system. To address more then
+8 bit of memory it uses a segement/offset register which holds the upper 8 bits called SEG. The
+instructions are generally in a two operand format (target/source 1 and source 0 address)
+
+ATTENTION! Be aware that there exists two different versions of the Picowizard:
+ -The normal Picowizard with the normal 4 registers
+ -The Picowizard+ ISA with an extended register bank of 8 registers
+
+ATTENTION! Be also aware that this document only specifies the ISA and general behaviour, not the
+implementation/microarchitecture itself. If you start with funny things like pipelining, multi
+threading, super scalarity, ... please design it in an ISA conform way.
+
+Changes to 1.2.0
+----------------------------------------------------------------------------------------------------
+Two problems were found within the previous which this version will now fix.
+
+First is that BIZ not only jumps to <SEG> (higher 8 bit) and one of the lower 4 registers (lower 8
+bit) but it also stores atomically the return address (BIZ instruction address + 1). During multiple
+discussions, it came out that the latter part could be hindering as each branch means that register
+B and C being overwritten. This makes the already existing problem of register pressure even worse.
+That is the reason why BIZ in 1.2.0 won't store the return address anymore while JMP will still act
+as call.
+
+The second problem is that register B and C are currently the return registers for JMP, meaning that
+only one variable can be saved (on register A) while the original jump address (lower 8 bit) and a
+second variable get overwritten. This was identified as the main contributor of the current register
+pressure problems within Picowizard CPUs. With that, 1.2.0 changes the call registers from B (lower
+8 bit) and C (higher 8 bit) to C (lower 8 bit) and SEG (higher 8 bit). This gives one more register
+which can be transfered over JMP instructions (register B). SEG gets now overwritten during a JMP, 
+but this is seen as unproblematic.
+
+General information
+####################################################################################################
+CPU Picowizard
+ -Picowizard Architecture
+ -Von Neumann memory architecture
+ - -65536 combined instruction/data words physical addressable
+ - - -1 byte (8 bit) per word
+ -RISC-like instruction architecture
+
+Picowizard ISA
+####################################################################################################
+General structure of an Picowizard instruction
+----------------------------------------------------------------------------------------------------
+Bits	Explanation
+[7:6]	Operation category identifier
+[5]	Operation extension bit 1/register address extension bit
+[4:3]	Register address (target and source 1)
+[2]	Operation extension bit 0/register address extension bit
+[1:0]	Register address (source 0)
+
+Instruction overview
+----------------------------------------------------------------------------------------------------
+Operation category (bit)	Explanation
+00				MOV instruction
+01				ALU instructions
+ 010				Arithmetic instructions
+ 011				Logic instructions
+10				Control instructions
+ 100				Memory instructions
+ 101				Program control instructions
+11				LDI instruction
+
+Instructions
+----------------------------------------------------------------------------------------------------
+MOV (only Picowizard)
+Structure (bitwise): 000T.T0SS; T = target register address, S = source register address
+Moves the value from register S to register T without deleting the original value in register S
+Can move values between register A, B, C and SEG
+
+MOV (only Picowizard+)
+Structure (bitwise): 00TT.TSSS; T = target register address, S = source register address
+Moves the value from register S to register T without deleting the original value in register S
+Can move values between register A, B, C, SEG, TA, TB, TC, TD
+
+ADD (all)
+Structure (bitwise): 010T.T0SS; T = target and source register address, S = source register address
+Adds the values from register T and S and stores the result in register T
+Additionally the carry flag is stored in the special carry register
+
+ADC (all)
+Structure (bitwise): 010T.T1SS; T = target and source register address, S = source register address
+Adds the values from register T, S the carry register and stores the result in register T
+Additionally the carry flag is stored in the special carry register
+
+NAND (all)
+Structure (bitwise): 011T.T0SS; T = target and source register address, S = source register address
+Performs NAND with register T and S and stores the result in register T
+Additionally the carry flag is set independently from is previous state
+
+XOR (all)
+Structure (bitwise): 011T.T1SS; T = target and source register address, S = source register address
+Performs NAND with register T and S and stores the result in register T
+Additionally the carry flag is set independently from is previous state
+
+LDA (all)
+Structure (bitwise): 100T.T0AA; T = target register address, A = source register with memory address
+Loads a value from memory address SEG (higher 8 bit) + register A (lower 8 bit) to register T
+
+STRA (all)
+Structure (bitwise): 100S.S1AA; S = source register address, A = source register with memory address
+Stores a value to memory address SEG (higher 8 bit) + register A (lower 8 bit) from register T
+
+BIZ (all)
+Structure (bitwise): 101C.C0AA; C = source compare register, A = source register with memory address
+If the value of register C is zero, then jump to memory address SEG (higher 8 bit) + register A
+(lower 8 bit). Else go to the next instruction (counter + 1).
+
+JMP (all)
+Structure (bitwise): 101S.S1AA; S = source segment register, A = source register with memory address
+Jumps directly to address register S (higher 8 bit) + register A (lower 8 bit).
+The current address + 1 is stored in the registers <B> (address) and register <C> (segment/offset)
+
+LDI (all)
+Structure (bitwise): 110T.T000 VVVV.VVVV; V = direct value
+Load the follow up word (value V) directly to register T
+
+Registers
+----------------------------------------------------------------------------------------------------
+Bare in mind that all registers (except for CRY and CTR) are 8 bit width!
+
+Register A (all)
+Address 00
+Mainly used as accu and to hold directly used variables
+
+Register B (all)
+Address 01
+Universal register to hold variables
+
+Register C (all)
+Address 10
+Universal register and and call register for the lower 8 bit of the current address + 1
+
+Register SEG (all)
+Address 11
+Segment/offset address register which holds the higher 8 bit of an address for a jump. Can be used
+as an universal register (care must be taken!). It also catches the higher 8 bit of the current
+address + 1 when executing a JMP
+
+Register TA (only Picowizard+)
+Address 100
+Temporary variable storage register
+
+Register TB (only Picowizard+)
+Address 101
+Temporary variable storage register
+
+Register TC (only Picowizard+)
+Address 110
+Temporary variable storage register
+
+Register TD (only Picowizard+)
+Address 111
+Temporary variable storage register
+
+Register CTR (all)
+No address (shadow register, only accessable via JMP and BIZ)
+The instruction counter which keeps track of the current instruction address. It is the only
+architectural register with a bit width of 16
+
+Register CRY (all)
+No address (shadow register, only accessable via ADC)
+The carry flag register (one bit width). Can only be manipulated by ALU operations
+
+Further information/special notes and behaviour
+####################################################################################################
+ -Picowizard+ has 8 registers. However, these extra 4 register can not be directly used for other
+  instructions then MOV. This is why they can only be used as temporary variable storage to prevent
+  far more expensive memory operations
+ -The first address (0x0000) must be the first instruction to be executed!
+ -The CPU must stop when the counter overflows (running to address 0x10000). As such 0xFFFF must not
+  be the last instruction to be successfully executed (0xFFFE is the last)!
+ -A reset must not reset register A, B, C and SEG, only CTR and CRY!

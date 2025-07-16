@@ -1,0 +1,31 @@
+PWH1_2: a Picowizard SystemVerilog implementation by RascalFoxfire
+####################################################################################################
+
+Introduction
+----------------------------------------------------------------------------------------------------
+The PWH1_2 is a small upgrade over the original PWH1, extending from the 1.1.0 to the 1.2.0 ISA
+specification. The address space is similar to PWH1 undefined as the CPU can be used as an IP-block
+in whatever external configuration it is needed.
+
+It needs a memory block with separated data input and output port, one address selection port and
+one read and write enable port (load enable can be ignored for some memory blocks).
+
+The CPU itself needs four clock cycles to execute one instruction (load, execute, write back, wait).
+With that the external memory has exactly 2 clockcycle time to perform a load/store operation till
+the CPUs writes back. This can be extended if the memory is internally pipelined but that bears the
+risk of load/store after load/store data hazards.
+
+General information
+----------------------------------------------------------------------------------------------------
+ -Architecture: Picowizard 1.1.0 release (full compatible)
+ -IPC: 0.25
+
+The following values were determined using the following tools and hardware:
+ -Vivado 2024.2
+ -Run on a Digilent Nexys A7 100T (Xilinx Artix 7 100T)
+
+Tested values:
+ -Maximum simulated frequency:
+ -MIPS:
+ -Used FF: (only CPU)
+ -Used LUTs: (only CPU)

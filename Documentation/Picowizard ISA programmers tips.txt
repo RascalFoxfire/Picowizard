@@ -11,6 +11,12 @@ Tips for assembler programmers
 ----------------------------------------------------------------------------------------------------
 This is a collection of different optimizations for assembler/hexadecimal
 
+General:
+- During a reset only CRY and CTR are reset, meaning that the first thing that you should do in your
+  program is zeroing the registers. Do not use LDI <register to zero> 0 since that uses two bytes
+  per register, so 8 bytes to zero all registers! Use instead XOR <register to zero> <register to
+  zero> (a trick also commonly used in x86 assembler) as with that you only need 4 bytes.
+
 Arithmetics:
 - Comparing two values can be done with a subtraction, followed up by an ADC on an empty register to
   get the carry bit. This register with the carry bit (or zero) can then by checked with BIZ. If it
@@ -20,6 +26,12 @@ Arithmetics:
   the value. Meanwhile a normal left shift can be simply achieved by using ADD instead.
 - Subtraction is achievable by inverting the minuend with NAND and then use ADC. The NAND instruction
   automatically sets the carry register to 1 to correct the computation.
+
+Interrupts:
+- While Picowizard doesn't directly support interrupts, one can implement them with the external
+  reset. As the reset is specified to reset CRY and CTR, it can be seen as an interrupt with the
+  target vector 0x0000. Best case scenario here is to store a current "run state" of the program in
+  SRAM which is then checked and lets the CPU jump to the actual interrupt handler.
 
 Loops:
 - For/iterative loops in ISA version 1.1 can be simplified when using SRAM memory for the routine.
