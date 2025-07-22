@@ -21,7 +21,7 @@ There is currently an Assembler and a simple ANSI C => Picowizard bitcode compil
 
 ## What is next?
 Picowizard is still further developed! There are multiple constructions sides around it:
-- Developing a fitting graphic driver following the same principles (as small as possible)
+- ~~Developing a fitting graphic driver following the same principles (as small as possible)~~ Currently in early alpha phase (Pixospark), available in the PWH1 project folder. Currently a pure tile monochrome tile engine using 62 LUTs, 67 FFs and only 2 KByte of memory! (technically 4 KByte of FPGA BRAM since 2 x 1 KByte of simple dual port RAM is needed)
 - Further optimize the SystemVerilog implementation to get closer to the 100 Xilinx LUT mark
 - Define the recommended address layout
 - Build the assembler and compiler
