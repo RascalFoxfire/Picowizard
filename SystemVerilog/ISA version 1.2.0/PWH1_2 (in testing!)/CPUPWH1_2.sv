@@ -138,7 +138,7 @@ module CPUPW1(
     
     //Register input update
     always_ff @(posedge Clk) if (StoreToA) RegA <= RegIn;
-    always_ff @(posedge Clk) if (StoreToB) RegB <= InRegB;
+    always_ff @(posedge Clk) if (StoreToB) RegB <= RegIn;
     always_ff @(posedge Clk) if (StoreToC || (Write && CALL)) RegC <= InRegC;
     always_ff @(posedge Clk) if (StoreToSEG || (Write && CALL)) Seg <= InRegSEG;
     always_ff @(posedge Clk) begin
