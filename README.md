@@ -31,7 +31,7 @@ Picowizard is still further developed! There are multiple constructions sides ar
 * A simple and fitting graphics driver will be soon provided
 * Further optimize the SystemVerilog implementation to get closer to the 100 Xilinx LUT mark
 * Define the recommended address layout
-* \[rainbains toolchain](https://https://github.com/rainbain/Picowizard-Infra) can be used for writing code to PW 1.2 and PW+ 1.2
+* [rainbains toolchain](https://github.com/rainbain/Picowizard-Infra) can be used for writing code to PW 1.2 and PW+ 1.2
 * Software, like SPI drivers
 * A simple documentation for how to efficiently program for Picowizards has been provided to Documentation and will be expanded over time
 
