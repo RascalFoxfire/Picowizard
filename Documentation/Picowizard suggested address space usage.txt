@@ -1,4 +1,4 @@
-Universal Pico-CPU Picowizard suggested address spaces by RascalFoxfire
+Universal Pico-CPU Picowizard suggested address spaces v2 by RascalFoxfire
 ####################################################################################################
 This is a suggested organization for general use of the Picowizard. This is not a part of ISA and
 can be ignored. However, it would be in general advantageous to standardize also the address space
@@ -40,6 +40,12 @@ The third schema focuses on mainly I/O space as following:
  -Block 0 is ROM for firmware like boot software
  -Block 1 and Block 2 is I/O address space exclusively
  -Block 3 is free for RAM/ROM
+
+Inverted block space
+----------------------------------------------------------------------------------------------------
+All above address spaces can also be inverted in address usage. This allows RAM to always start at
+address 0x0000, allowing the use of the "zero page" (address 0x0000-0x00FF) as quick scratch memory
+by the CPU. This is highly recommended as this zero page space can significantly speed up the CPU.
 
 Specific I/O address organization
 ####################################################################################################

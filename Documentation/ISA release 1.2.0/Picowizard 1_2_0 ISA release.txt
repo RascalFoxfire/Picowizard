@@ -1,4 +1,4 @@
-Picowizard ISA documentation version 1.1.0 by RascalFoxfire
+Picowizard ISA documentation version 1.2.0 by RascalFoxfire
 ####################################################################################################
 The Pico-Series is an universal CPU-ISA series originally developed for embedded systems with very
 limited resources (area and power wise). As such they are optimized to take as few space as possible
@@ -39,7 +39,7 @@ ATTENTION! Be also aware that this document only specifies the ISA and general b
 implementation/microarchitecture itself. If you start with funny things like pipelining, multi
 threading, super scalarity, ... please design it in an ISA conform way.
 
-Changes to 1.2.0
+Changes to 1.1.0
 ----------------------------------------------------------------------------------------------------
 Two problems were found within the previous which this version will now fix.
 

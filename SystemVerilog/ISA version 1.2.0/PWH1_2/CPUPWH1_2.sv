@@ -78,7 +78,7 @@ module CPUPW1(
     end
     
     //Counter and branch
-    always_comb Zero = ~(OutRegA[0] | OutRegA[1] | OutRegA[2] | OutRegA[3] | OutRegA[4] | OutRegA[5] | OutRegA[6] | OutRegA[7]);
+    always_comb Zero = (OutRegA == 8'b00000000);
     always_comb begin
         if (CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && Zero) JumpAdr = {Seg, OutRegB};
         else JumpAdr = {OutRegA, OutRegB};

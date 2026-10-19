@@ -1,0 +1,82 @@
+RACUDEUS ASM Var Smart v1.0.0
+RACUDEUS ASM StdNum Hex
+
+DEFINE STATVAL ColorValAdr 0x0100
+DEFINE STATVAL CurrentPixelAdr 0x0200
+DEFINE STATVAL VGACCR 0x3800
+DEFINE STATVAL VGAAdr 0x4000
+
+START:
+MOV A A
+MOV A A
+
+LOOP:
+LDI SEG .ColorVal[15:8]
+LDI C .ColorVal[7:0]
+LDA B C //Color loaded
+LDI SEG .CurrentPixel[15:8]
+LDI C .CurrentPixel[7:0]
+LDA A C //Pixel address loaded
+LDI C (.CurrentPixel[7:0] + 1)
+LDA SEG C //Pixel segment loaded
+STRA B A //Stored color to frame buffer
+LDI A 0x01
+ADD B A //Color incremented
+LDI SEG .ColorVal[15:8]
+LDI C .ColorVal[7:0]
+STRA B C //Stored incremented color
+LDI SEG .CurrentPixel[15:8]
+LDI C .CurrentPixel[7:0]
+LDA B C //Pixel address loaded
+ADD B A
+STRA B C //Pixel address incremented and stored
+LDI C (.CurrentPixel[7:0] + 1)
+LDA B C
+LDI A 0x00
+ADC A A //Get carry from pixel address increment
+ADD B A //Increment
+STRA B C //Store pixel segment
+LDI SEG .RESETSEG[15:8]
+LDI C .RESETSEG[7:0]
+BIZ B C //Check if we got a pixel segment overflow
+LDI SEG .LOOP[15:8]
+LDI C .LOOP[7:0]
+JMP SEG C
+
+RESETSEG:
+LDI SEG .CurrentPixel[15:8]
+LDI C (.CurrentPixel[7:0] + 1)
+LDI B <VGAAdr[15:8]
+STRA B C //Store the start segment address of the frame buffer
+LDI SEG .ColorVal[15:8]
+LDI C .ColorVal[7:0]
+LDA B C
+LDI A 0x01
+ADD B A
+STRA B C
+LDI SEG <VGACCR[15:8]
+LDI C <VGACCR[7:0]
+LDI B 0x02
+STRA B C
+LDI A 0b00000100
+
+WAITLOOP:
+LDA B C
+NAND A B
+NAND A A
+LDI SEG .WAITLOOP[15:8]
+LDI C .WAITLOOP[7:0]
+BIZ A C
+LDI SEG <VGACCR[15:8]
+LDI C <VGACCR[7:0]
+LDI B 0x00
+STRA B C
+LDI SEG .LOOP[15:8]
+LDI C .LOOP[7:0]
+JMP SEG C
+
+<ColorValAdr ColorVal:
+VAL: 0x00
+
+<CurrentPixelAdr CurrentPixel:
+VAL: <VGAAdr[7:0] <VGAAdr[15:8]

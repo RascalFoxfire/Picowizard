@@ -11,7 +11,7 @@ It needs a memory block with separated data input and output port, one address s
 one read and write enable port (load enable can be ignored for some memory blocks).
 
 The CPU itself needs four clock cycles to execute one instruction (load, execute, write back, wait).
-With that the external memory has exactly 2 clockcycle time to perform a load/store operation till
+With that the external memory has exactly 2 clock cycle time to perform a load/store operation till
 the CPUs writes back. This can be extended if the memory is internally pipelined but that bears the
 risk of load/store after load/store data hazards.
 
@@ -25,7 +25,7 @@ The following values were determined using the following tools and hardware:
  -Run on a Digilent Nexys A7 100T (Xilinx Artix 7 100T)
 
 Tested values:
- -Maximum simulated frequency:
- -MIPS:
- -Used FF: (only CPU)
- -Used LUTs: (only CPU)
+ -Maximum simulated frequency: 180 MHz
+ -MIPS: 45
+ -Used FF: 59 (only CPU)
+ -Used LUTs: 164 (only CPU)
