@@ -21,7 +21,7 @@ ADC	010T.T1SS		All		Add register S + register T + CRY, store to register T and C
 NAND	011T.T0SS		All		NAND operation register S NAND register T, store to register T and set CRY to 1
 XOR	011T.T1SS		All		XOR operation register S XOR register T, store to register T and set CRY to 1
 BIZ	100C.C0AA		All		If register C = 0 then jump to <SEG> (high 8 bit) and register A (low 8 bit), otherwise go to the next Op
-JMP	100S.S1AA		All		Jump directly to register S (high 8 bit) and register A (low 8 bit)
+JMP	100S.S1AA		All		Jump directly to register S (high 8 bit) and register A (low 8 bit), store CTR + 1 in register <C> (low 8 bit) and <SEG> (high 8 bit)
 STRA	101S.S1AA		All		Store to memory address <SEG> (high 8 bit) and register A (low 8 bit) from register S
 LDI	110T.T100 VVVV.VVVV	All		Load directly V into register T
 LDA	111T.T1AA		All		Load from memory address <SEG> (high 8 bit) and register A (low 8 bit) to register T

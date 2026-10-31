@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module CPUPW1(
+module CPUPWH1_2(
     input logic Clk, CPUEn,
     input logic[7:0] DataIn,
     output logic LdMem, WrtMem,

@@ -23,7 +23,7 @@ module Main (
         .VGAClkGen(SysVGAClk)
     );
     
-    CPUPW1 MainCPU(
+    CPUPWH1_2 MainCPU(
         .Clk(SysMainClk),
         .CPUEn(CPUEnable),
         .DataIn(DataFromModulesToCPU),

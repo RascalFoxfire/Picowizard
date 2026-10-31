@@ -138,7 +138,7 @@ If the value of register C is zero, then jump to memory address SEG (higher 8 bi
 JMP (all)
 Structure (bitwise): 101S.S1AA; S = source segment register, A = source register with memory address
 Jumps directly to address register S (higher 8 bit) + register A (lower 8 bit).
-The current address + 1 is stored in the registers <B> (address) and register <C> (segment/offset)
+The current address + 1 is stored in the registers <C> (address) and register <SEG> (segment/offset)
 
 LDI (all)
 Structure (bitwise): 110T.T000 VVVV.VVVV; V = direct value
