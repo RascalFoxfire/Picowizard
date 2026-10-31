@@ -47,7 +47,7 @@ module CPUPWH1_2(
     always_comb {CounterCarry, IncAdr} = CurrentAdr + 1'b1; //Calculate next address
     
     //Operations
-    always_comb CALL = Write & (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & !CurrentOp[2]);
+    always_comb CALL = Write & (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & CurrentOp[2]);
     always_comb StrOps = ~CurrentOp[7] | CurrentOp[6] | (CurrentOp[7] & ~CurrentOp[6] & ~CurrentOp[5] & ~CurrentOp[2]);
     
     //Registers
@@ -85,7 +85,7 @@ module CPUPWH1_2(
     end
     
     always_comb begin
-        if (((CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && Zero) || (CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && CurrentOp[2])) && MicroCounter[1]) NextAdr = JumpAdr;
+        if (((CurrentOp[7] && !CurrentOp[6] && CurrentOp[5] && (Zero || CurrentOp[2]))) && MicroCounter[1]) NextAdr = JumpAdr;
         else NextAdr = IncAdr;
     end
     

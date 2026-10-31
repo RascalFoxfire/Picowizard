@@ -47,7 +47,7 @@ module CPUPW1(
     always_comb {CounterCarry, IncAdr} = CurrentAdr + 1'b1; //Calculate next address
     
     //Operations
-    always_comb CALL = Write & (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & Zero) | (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & !CurrentOp[2]);
+    always_comb CALL = Write & (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & Zero) | (CurrentOp[7] & ~CurrentOp[6] & CurrentOp[5] & CurrentOp[2]);
     always_comb StrOps = ~CurrentOp[7] | CurrentOp[6] | (CurrentOp[7] & ~CurrentOp[6] & ~CurrentOp[5] & ~CurrentOp[2]);
     
     //Registers
